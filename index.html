@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yıldız'ım & Eren ❤️</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #1a000c 0%, #3a0016 35%, #58001d 70%, #20000d 100%);
+            overflow-x: hidden;
+            user-select: none;
+            color: #ffffff;
+        }
+
+        .font-serif-custom {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .font-script {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 200, 220, 0.2);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.05);
+        }
+
+        /* Glow animation for primary card */
+        @keyframes romanticGlow {
+            0%, 100% {
+                box-shadow: 0 0 30px rgba(255, 77, 109, 0.3), 0 0 60px rgba(255, 182, 193, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 50px rgba(255, 77, 109, 0.6), 0 0 90px rgba(255, 182, 193, 0.4);
+            }
+        }
+
+        .glow-effect {
+            animation: romanticGlow 4s infinite ease-in-out;
+        }
+
+        /* Floating Hearts / Stars animation */
+        .floating-element {
+            position: absolute;
+            pointer-events: none;
+            animation: floatUp 4s linear forwards;
+            z-index: 50;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(0.8) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1.4) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Pulse Heart Button */
+        @keyframes heartPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.12); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse-heart {
+            animation: heartPulse 1.8s infinite ease-in-out;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(20, 0, 10, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 100, 150, 0.4);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between items-center relative p-4 sm:p-6 overflow-y-auto">
+
+    <!-- Interactive Canvas for Floating Stars & Sparkles -->
+    <canvas id="starCanvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0"></canvas>
+
+    <!-- Header / Sound Bar -->
+    <header class="w-full max-w-3xl flex justify-between items-center z-10 py-3 px-6 glass-card rounded-full mt-2">
+        <div class="flex items-center space-x-2">
+            <i class="fas fa-star text-yellow-300 text-lg animate-pulse"></i>
+            <span class="font-script text-2xl text-pink-200 font-bold tracking-wider">Eren & Yıldız</span>
+        </div>
+        <button id="musicBtn" onclick="toggleAudio()" class="flex items-center space-x-2 bg-pink-500/20 hover:bg-pink-500/30 text-pink-100 px-4 py-2 rounded-full backdrop-blur-md transition-all border border-pink-300/30 text-xs sm:text-sm font-semibold active:scale-95">
+            <i id="musicIcon" class="fas fa-music text-pink-300"></i>
+            <span id="musicText">Şarkıyı Dinle 🎵</span>
+        </button>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="w-full max-w-3xl z-10 my-auto py-8 flex flex-col items-center text-center space-y-8">
+
+        <!-- Top Star & Heart Icon Badge -->
+        <div class="relative cursor-pointer" onclick="createHeartBurst(event)">
+            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-pink-600 via-rose-500 to-yellow-300 p-1 shadow-2xl pulse-heart">
+                <div class="w-full h-full bg-slate-950/80 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/20">
+                    <i class="fas fa-heart text-3xl sm:text-4xl text-rose-500"></i>
+                </div>
+            </div>
+            <div class="absolute -top-1 -right-1 bg-yellow-400 text-slate-950 p-1.5 rounded-full text-xs shadow-lg animate-bounce">
+                <i class="fas fa-star"></i>
+            </div>
+        </div>
+
+        <!-- Main Hero Quote Card -->
+        <div class="glass-card glow-effect rounded-3xl p-6 sm:p-10 w-full relative overflow-hidden transition-all duration-500">
+            
+            <div class="inline-block px-4 py-1.5 bg-rose-500/20 text-pink-200 rounded-full text-xs sm:text-sm font-semibold tracking-widest uppercase mb-6 border border-rose-400/30">
+                Sadece Sana Özel... ✨
+            </div>
+
+            <h1 class="font-serif-custom text-2xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight mb-6 drop-shadow-lg">
+                "29 Ekim'de egemenlik kayıtsız şartsız milletindir... <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-rose-200 to-yellow-200 font-script text-4xl sm:text-6xl md:text-7xl font-normal block mt-4">
+                    Ama bu kalp tamamen senindir, Yıldız'ım! ❤️
+                </span>"
+            </h1>
+
+            <p class="text-pink-100/90 text-sm sm:text-base font-light max-w-xl mx-auto leading-relaxed mb-8">
+                Gökyüzündeki bütün yıldızları toplasak hiçbiri senin ışıltına yaklaşamaz yavrum, benim tek ve en parlak Yıldız'ım sensin. Hayatıma kattığın her güzel an için teşekkür ederimmmm.
+            </p>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <button onclick="openLetterModal()" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center space-x-3 border border-pink-300/40">
+                    <i class="fas fa-envelope-open-text text-xl"></i>
+                    <span>Sana Mektubum Var 💌</span>
+                </button>
+
+                <button onclick="openLoveMeterModal()" class="w-full sm:w-auto px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-2xl shadow-xl backdrop-blur-md hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center space-x-3 border border-white/20">
+                    <i class="fas fa-calculator text-yellow-300 text-xl"></i>
+                    <span>Aşk Ölçer 💖</span>
+                </button>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="z-10 text-center text-xs text-pink-200/60 py-4 space-y-1">
+        <p>Eren tarafından Yıldız'a sonsuz sevgiyle yapılmıştır ❤️</p>
+        <p class="opacity-70">Ekrana her dokunduğunda bir yıldız doğar ✨</p>
+    </footer>
+
+    <!-- LOVE LETTER MODAL -->
+    <div id="letterModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-500">
+        <div class="bg-white text-slate-800 rounded-3xl p-6 sm:p-8 max-w-lg w-full relative shadow-2xl transform scale-90 transition-transform duration-500 border-4 border-rose-300 max-h-[85vh] overflow-y-auto" id="letterModalCard">
+            
+            <button onclick="closeLetterModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 w-9 h-9 rounded-full flex items-center justify-center bg-gray-100 transition-colors">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="text-center mb-6">
+                <i class="fas fa-envelope-open-text text-4xl text-rose-500 mb-2"></i>
+                <h2 class="font-script text-3xl text-rose-600 font-bold">Biricik Yıldız'ıma...</h2>
+                <div class="w-16 h-1 bg-rose-400 mx-auto rounded-full mt-2"></div>
+            </div>
+
+            <div class="space-y-4 font-serif-custom text-gray-700 text-sm sm:text-base leading-relaxed">
+                <p>
+                    "Güzelim, bebeğim, yavrum, sevgilim, aşkım, birtanem... Bu iki hafta içerisinde çok fazla tartıştık. Seni istemeden de olsa kırdım ve üzdüm. Sen üzüldükten sonra gerisinin hiçbir anlamı yok zaten. Bunun için çok üzgün olduğumu bilmeni istiyorum, o pamuk gibi kalbinle hep mutlu olmayı hakediyorsun, seniii çoooooook amaaa çooooooooookkkkk seviyoruuuuuummmmmmmmmmmmm! ❤️❤️❤️..."
+                </p>
+                <p class="text-center text-xl sm:text-2xl tracking-widest break-words py-2 text-rose-500">
+                    ❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️
+                </p>
+            </div>
+
+            <div class="text-right mt-6 pt-4 border-t border-gray-200">
+                <p class="font-script text-2xl font-bold text-rose-600">Eren ❤️</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOVE METER MODAL -->
+    <div id="loveMeterModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-500">
+        <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-md w-full relative shadow-2xl text-center border border-pink-300/40">
+            
+            <button onclick="closeLoveMeterModal()" class="absolute top-4 right-4 text-pink-200 hover:text-white w-9 h-9 rounded-full flex items-center justify-center bg-white/10 transition-colors">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <i class="fas fa-heart-circle-check text-5xl text-rose-400 mb-4 animate-bounce"></i>
+            <h2 class="font-script text-3xl text-pink-200 font-bold mb-2">Eren'in Yıldız Sevgisi</h2>
+            <p class="text-xs text-pink-100/70 mb-6">Aşk testi hesaplanıyor...</p>
+
+            <div class="w-full bg-black/40 rounded-full h-6 p-1 border border-pink-300/30 mb-4 overflow-hidden">
+                <div id="loveMeterBar" class="bg-gradient-to-r from-pink-500 via-rose-500 to-yellow-300 h-full rounded-full w-0 transition-all duration-1000 flex items-center justify-end pr-2 text-[10px] font-bold text-slate-900">
+                </div>
+            </div>
+
+            <p id="loveResultText" class="font-bold text-lg text-yellow-300 min-h-[30px]"></p>
+
+            <button onclick="testLove()" class="mt-4 px-6 py-3 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl shadow-lg active:scale-95 transition-all text-sm">
+                Yeniden Ölç 💖
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        /* 1. Touch / Click Heart & Star Burst Effect */
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('button') || e.target.closest('#letterModal') || e.target.closest('#loveMeterModal')) return;
+            createParticleAt(e.clientX, e.clientY);
+        });
+
+        function createParticleAt(x, y) {
+            const el = document.createElement('div');
+            el.className = 'floating-element text-xl sm:text-2xl';
+            el.style.left = `${x - 12}px`;
+            el.style.top = `${y - 12}px`;
+
+            const icons = ['✨', '⭐', '❤️', '💖', '🌟', '💕'];
+            el.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 4000);
+        }
+
+        function createHeartBurst(e) {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            for(let i=0; i<15; i++) {
+                setTimeout(() => {
+                    createParticleAt(
+                        centerX + (Math.random() * 160 - 80),
+                        centerY + (Math.random() * 160 - 80)
+                    );
+                }, i * 60);
+            }
+        }
+
+        /* 2. YouTube Redirection logic for Yalın - Cumhuriyet */
+        function toggleAudio() {
+            window.open('https://www.youtube.com/watch?v=qqh_4Z6QCyw', '_blank');
+        }
+
+        /* 3. Letter Modal Controls */
+        function openLetterModal() {
+            const modal = document.getElementById('letterModal');
+            const card = document.getElementById('letterModalCard');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-90');
+            card.classList.add('scale-100');
+        }
+
+        function closeLetterModal() {
+            const modal = document.getElementById('letterModal');
+            const card = document.getElementById('letterModalCard');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-90');
+        }
+
+        /* 4. Love Meter Modal Logic */
+        function openLoveMeterModal() {
+            const modal = document.getElementById('loveMeterModal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            testLove();
+        }
+
+        function closeLoveMeterModal() {
+            const modal = document.getElementById('loveMeterModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function testLove() {
+            const bar = document.getElementById('loveMeterBar');
+            const result = document.getElementById('loveResultText');
+            
+            bar.style.width = '0%';
+            bar.innerText = '';
+            result.innerText = '';
+
+            setTimeout(() => {
+                bar.style.width = '100%';
+                bar.innerText = '%1000000';
+            }, 200);
+
+            setTimeout(() => {
+                result.innerText = 'Sonsuz Aşk! Ölçüm cihazı patladı! ❤️♾️';
+            }, 1200);
+        }
+
+        /* 5. Canvas Stars Background animation */
+        const canvas = document.getElementById('starCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Star {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.alpha = Math.random() * 0.8 + 0.2;
+                this.speedAlpha = (Math.random() - 0.5) * 0.015;
+            }
+            update() {
+                this.alpha += this.speedAlpha;
+                if (this.alpha <= 0.1 || this.alpha >= 0.95) {
+                    this.speedAlpha = -this.speedAlpha;
+                }
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = '#ffedf3';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        const stars = Array.from({ length: 90 }, () => new Star());
+
+        function animateStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(s => {
+                s.update();
+                s.draw();
+            });
+            requestAnimationFrame(animateStars);
+        }
+        animateStars();
+    </script>
+</body>
+</html>
